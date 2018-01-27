@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static wagtailcore_tags wagtailimages_tags wagtailroutablepage_tags %}
+
+{% block content %}
+    <!-- Page Header -->
+    {% if self.header_image %}
+        <header class="masthead" style="background-image: url('/media/{{ self.header_image.file }}')">
+    {% else %}
+        <header class="masthead">
+    {% endif %}
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <div class="post-heading">
+              <h1>{{ self.title }}</h1>
+                {% for block in self.body %}
+                    {% if block.block_type == 'post_heading' %}
+                        <h2 class="subheading">{{ block.value }}</h2>
+                    {% endif %}
+                {% endfor %}
+              <p class="post-meta">Posted on {{ page.date|date:"F j, Y" }} by {{ page.owner.first_name }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Post Content -->
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-10 mx-auto">
+                    {% for block in self.body %}
+                        {% if block.block_type == 'post_heading' %}
+
+                        {% elif block.block_type == 'section_heading' %}
+                            <h2 class="{{ block.block_type }}">{{ block.value }}</h2>
+                        {% elif block.block_type == 'inline_image' %}
+                            {% image block.value original class="img-fluid" %}
+                        {% elif block.block_type == 'paragraph' %}
+                            {{ block.value }}
+                        {% elif block.block_type == 'code' %}
+                            <div class="syntax">
+                                {{ block }}
+                            </div>
+                        {% elif block.block_type == 'video' %}
+                        {% elif block.block_type == 'left_aligned_image' %}
+                            <div class="row">
+                                <div class="col-md-8">
+                                    {% include 'blog/left_aligned_image.html' with blocks=block.value.left_column only %}
+                                </div>
+
+                                <div class="col-md-4">
+                                    {% with blocks=block.value.right_column %}
+                                        <small>{% include_block blocks %}</small>
+                                    {% endwith %}
+                                </div>
+                            </div>
+                            <br />
+                        {% elif block.block_type == 'right_aligned_image' %}
+                            <div class="row">
+                                <div class="col-md-4">
+                                    {% with blocks=block.value.left_column %}
+                                        <small>{% include_block blocks %}</small>
+                                    {% endwith %}
+                                </div>
+                                <div class="col-md-8">
+                                    {% include 'blog/right_aligned_image.html' with blocks=block.value.right_column only %}
+                                </div>
+                            </div>
+                            <br />
+                        {% elif block.block_type == 'panorama_image' %}
+                            {% image block.value original as panorama %}
+                                <div id="panorama" class="container-fluid"></div>
+                                <script type="text/javascript">
+                                    pannellum.viewer('panorama', {
+                                        "type": "equirectangular",
+                                        "panorama": "{{ panorama.url }}",
+                                        //"panorama": "https://s3.amazonaws.com/dad2cl3-manifest/public/PANO_20150808_183924.jpg",
+                                        "autoLoad": true
+                                    });
+                                </script>
+                        {% elif block.block_type == 'right_aligned_code_block' %}
+                            <p>{{ block.value.left_column }}</p>
+                            <p>{{ block.value.right_column }}</p>
+
+                        {% elif block.block_type == 'two_column_code_block' %}
+                            {{ block.left_column }}
+                        {% else %}
+                            {{ block }}
+                        {% endif %}
+                    {% endfor %}
+                    <br/>
+                    <a href="/{{ self.parent_url }}"><button type="button" class="btn btn-primary btn-sm">Return</button></a>
+                </div>
+            </div>
+        </div>
+    </article>
+    <hr>
+{% endblock %}

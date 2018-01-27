@@ -1,0 +1,10 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% if blocks %}
+    {% for block in blocks %}
+        {% if block.block_type == 'image' %}
+            {% image block.value original class="img-fluid rounded" %}
+        {% elif block.block_type == 'paragraph' %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
