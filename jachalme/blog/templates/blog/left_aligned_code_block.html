@@ -1,14 +1,12 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-8">
         <div class="syntax">
             {{ block.value.left_column }}
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="syntax">
-            {{ block.value.right_column }}
-        </div>
+    <div class="col-md-4">
+        <small>{{ block.value.right_column }}</small>
     </div>
 </div>

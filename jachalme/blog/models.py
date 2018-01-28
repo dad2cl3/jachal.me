@@ -111,7 +111,7 @@ class CodeBlock(blocks.StructBlock):
     style = ChoiceBlock(choices=STYLE_CHOICES, default='syntax')
     code = TextBlock()
 
-    def render(self, value):
+    def render(self, value, context):
         src = value['code'].strip('\n')
         lang = value['language']
         lexer = get_lexer_by_name(lang)
@@ -129,6 +129,20 @@ class CodeBlock(blocks.StructBlock):
         return mark_safe(highlight(src, lexer, formatter))
 
     class Meta:
+        icon = 'code'
+
+class LeftAlignedCodeBlock(blocks.StructBlock):
+
+    left_column = blocks.StreamBlock([
+        ('code', CodeBlock()),
+    ])
+
+    right_column = blocks.StreamBlock([
+        ('paragraph', blocks.RichTextBlock()),
+    ])
+
+    class Meta:
+        template = 'blog/left_aligned_code_block.html'
         icon = 'code'
 
 
@@ -179,12 +193,12 @@ class LeftAlignedImage(blocks.StructBlock):
 
 class RightAlignedImage(blocks.StructBlock):
 
-    right_column = blocks.StreamBlock([
-        ('image', ImageChooserBlock()),
-    ])
-
     left_column = blocks.StreamBlock([
         ('paragraph', blocks.RichTextBlock())
+    ])
+
+    right_column = blocks.StreamBlock([
+        ('image', ImageChooserBlock()),
     ])
 
     class Meta:
@@ -213,7 +227,8 @@ class PostPage(Page):
         ('video', EmbedBlock()),
         ('left_aligned_image', LeftAlignedImage()),
         ('right_aligned_image', RightAlignedImage()),
-        #('two_column_code_block', TwoColumnCodeBlock()),
+        ('two_column_code_block', TwoColumnCodeBlock()),
+        ('left_aligned_code_block', LeftAlignedCodeBlock()),
         ('right_aligned_code_block', RightAlignedCodeBlock()),
     ])
 

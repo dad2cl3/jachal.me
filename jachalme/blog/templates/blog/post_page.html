@@ -82,9 +82,7 @@
                                     });
                                 </script>
                         {% elif block.block_type == 'right_aligned_code_block' %}
-                            <p>{{ block.value.left_column }}</p>
-                            <p>{{ block.value.right_column }}</p>
-
+                            {% include_block block %}
                         {% elif block.block_type == 'two_column_code_block' %}
                             {{ block.left_column }}
                         {% else %}
