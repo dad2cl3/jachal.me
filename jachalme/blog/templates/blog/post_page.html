@@ -41,9 +41,7 @@
                         {% elif block.block_type == 'paragraph' %}
                             {{ block.value }}
                         {% elif block.block_type == 'code' %}
-                            <div class="syntax">
-                                {{ block }}
-                            </div>
+                            {{ block }}
                         {% elif block.block_type == 'video' %}
                         {% elif block.block_type == 'left_aligned_image' %}
                             <div class="row">
