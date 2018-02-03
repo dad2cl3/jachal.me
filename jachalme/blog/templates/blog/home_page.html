@@ -38,7 +38,7 @@
                             {% endfor %}
                         {% endwith %}
                     </a>
-                    <p class="post-meta">Posted on {{ page.date|date:"F j, Y" }} by {{ page.owner.first_name }}</p>
+                    <p class="post-meta">Posted on {{ page.first_published_at|date:"F j, Y" }} by {{ page.owner.first_name }}</p>
                       <a href="/{{ page.slug }}"><button type="button" class="btn btn-primary btn-sm">Read More</button></a>
 
                   </div>

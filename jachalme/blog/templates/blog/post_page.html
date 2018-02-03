@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% load static wagtailcore_tags wagtailimages_tags wagtailroutablepage_tags %}
-
 {% block content %}
     <!-- Page Header -->
     {% if self.header_image %}
@@ -8,7 +7,7 @@
     {% else %}
         <header class="masthead">
     {% endif %}
-      <div class="overlay"></div>
+    <div class="overlay"></div>
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
@@ -19,7 +18,7 @@
                         <h2 class="subheading">{{ block.value }}</h2>
                     {% endif %}
                 {% endfor %}
-              <p class="post-meta">Posted on {{ page.date|date:"F j, Y" }} by {{ page.owner.first_name }}</p>
+              <p class="post-meta">Posted on {{ page.first_published_at|date:"F j, Y" }} by {{ page.owner.first_name }}</p>
             </div>
           </div>
         </div>
@@ -27,10 +26,15 @@
     </header>
 
     <!-- Post Content -->
+
     <article>
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-md-10 mx-auto">
+                    <div class="row justify-content-end">
+                        <iframe src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fwww.jachal.me{{ self.url }}&layout=button&size=small&mobile_iframe=false&quote={{ self.title }}&width=59&height=20&appId" width="59" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true">Text</iframe>
+                        <a class="twitter-share-button" href="https://twitter.com/intent/tweet" data-size="small">Tweet</a>
+                    </div>
                     {% for block in self.body %}
                         {% if block.block_type == 'post_heading' %}
 
@@ -70,7 +74,7 @@
                             <br />
                         {% elif block.block_type == 'panorama_image' %}
                             {% image block.value original as panorama %}
-                                <div id="panorama" class="container-fluid"></div>
+                               <div id="panorama" class="container-fluid"></div>
                                 <script type="text/javascript">
                                     pannellum.viewer('panorama', {
                                         "type": "equirectangular",
@@ -79,6 +83,7 @@
                                         "autoLoad": true
                                     });
                                 </script>
+                            <!-- <iframe width="100%" height="400" allowfullscreen style="border-style:none;" src="https://cdn.pannellum.org/2.4/pannellum.htm#panorama=http://www.jachal.me{{ panorama.url }}"></iframe> -->
                         {% elif block.block_type == 'right_aligned_code_block' %}
                             {% include_block block %}
                         {% elif block.block_type == 'two_column_code_block' %}
@@ -87,11 +92,36 @@
                             {{ block }}
                         {% endif %}
                     {% endfor %}
+
+                    <!-- <iframe src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fwww.jachal.me{{ self.url }}&layout=button&size=small&mobile_iframe=false&quote={{ self.title }}&width=59&height=20&appId" width="59" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true">Text</iframe>
+                    <a class="twitter-share-button" href="https://twitter.com/intent/tweet" data-size="small">Tweet</a> -->
                     <br/>
                     <a href="/{{ self.parent_url }}"><button type="button" class="btn btn-primary btn-sm">Return</button></a>
+                </div>
+            </div>
+            <hr/>
+            <div class="row">
+                <div class="col-lg-8 col-md-10 mx-auto">
+                        <div id="disqus_thread"></div>
+                            <script>
+
+                            var disqus_config = function () {
+                            //this.page.url = '{{ self.url }}';  // Replace PAGE_URL with your page's canonical URL variable
+                            this.page.identifier = 'post-{{ post.id }}'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                            };
+
+                            (function() { // DON'T EDIT BELOW THIS LINE
+                            var d = document, s = d.createElement('script');
+                            s.src = 'https://jachalme.disqus.com/embed.js';
+                            s.setAttribute('data-timestamp', +new Date());
+                            (d.head || d.body).appendChild(s);
+                            })();
+                            </script>
+                            <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
                 </div>
             </div>
         </div>
     </article>
     <hr>
+
 {% endblock %}
