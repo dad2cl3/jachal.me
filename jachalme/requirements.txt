@@ -2,7 +2,7 @@ beautifulsoup4==4.6.0
 bleach==2.1.2
 certifi==2017.11.5
 chardet==3.0.4
-Django==1.11.9
+Django==1.11.23
 django-modelcluster==3.1
 django-taggit==0.22.2
 django-treebeard==4.2.0
